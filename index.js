@@ -79,7 +79,7 @@ class Playground {
     const node = this.#createCircleNode(circleInstance);
     CIRCLES_CONTAINER.appendChild(node);
     node.addEventListener("click", () => {
-      circleInstance.toggleSelected(node);
+      circleInstance.toggleSelected();
       const activeCircles = this.getSelectedCircles();
       this.hasSelectedCircles = activeCircles.total > 0;
     });
@@ -133,10 +133,11 @@ class Circle {
     domNode.dataset.active = newValue;
   }
 
-  toggleSelected(circleNode) {
+  toggleSelected() {
+    const domNode = this.getNodeInDom();
     const selected = !this.selected;
     this.selected = selected;
-    circleNode.dataset.selected = selected;
+    domNode.dataset.selected = selected;
   }
 
   getNodeInDom() {
