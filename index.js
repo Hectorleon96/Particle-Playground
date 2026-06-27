@@ -20,15 +20,28 @@ class Playground {
   constructor() {
     this.started = false;
     this.circles = [new Circle({ circle: this.#defaultCircleData })];
+    this.hasSelectedCircles = false;
   }
 
   play() {
     this.started = true;
+
+    const circlesToPlay = this.solveCirclesToUpdate();
+    circlesToPlay.forEach((circle) => {
+      circle.toggleActive();
+    });
+
     INIT_BUTTON.textContent = "Pause";
   }
 
   pause() {
     this.started = false;
+
+    const circlesToPause = this.solveCirclesToUpdate();
+    circlesToPause.forEach((circle) => {
+      circle.toggleActive();
+    });
+
     INIT_BUTTON.textContent = "Play";
   }
 
@@ -65,7 +78,11 @@ class Playground {
   paintCircle(circleInstance) {
     const node = this.#createCircleNode(circleInstance);
     CIRCLES_CONTAINER.appendChild(node);
-    node.addEventListener("click", () => circleInstance.toggleSelected(node));
+    node.addEventListener("click", () => {
+      circleInstance.toggleSelected(node);
+      const activeCircles = this.getSelectedCircles();
+      this.hasSelectedCircles = activeCircles.total > 0;
+    });
   }
 
   resetCirclesList() {
@@ -73,13 +90,29 @@ class Playground {
     this.circles = [new Circle({ circle: this.#defaultCircleData })];
     this.paintCircle(this.circles[0]);
 
-    const defaultNode = document.querySelector("div[data-id='1']");
+    const defaultNode = this.circles[0].getNodeInDom();
     if (defaultNode) {
       defaultNode.dataset.selected = false;
     }
 
     ADD_CIRCLE_BUTTON.disabled = false;
     RESTART_CIRCLES_BUTTON.disabled = true;
+  }
+
+  getSelectedCircles() {
+    const activeCircles = this.circles.filter((circle) => circle.selected);
+    return {
+      total: activeCircles.length,
+      circles: activeCircles,
+    };
+  }
+
+  solveCirclesToUpdate() {
+    const circles = this.hasSelectedCircles
+      ? this.getSelectedCircles().circles
+      : this.circles;
+
+    return circles;
   }
 }
 
@@ -92,14 +125,21 @@ class Circle {
     this.active = circle.active;
   }
 
-  toggleInit() {
-    this.active = !this.active;
+  toggleActive() {
+    const newValue = !this.active;
+    this.active = newValue;
+    const domNode = this.getNodeInDom();
+    domNode.dataset.active = newValue;
   }
 
   toggleSelected(circleNode) {
     const selected = !this.selected;
     this.selected = selected;
     circleNode.dataset.selected = selected;
+  }
+
+  getNodeInDom() {
+    return document.querySelector(`div[data-id='${this.id}']`);
   }
 }
 
