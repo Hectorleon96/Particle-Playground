@@ -1,0 +1,82 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0px;
+  background-color: #222;
+  overflow: hidden;
+}
+
+h1 {
+  text-align: center;
+  color: #fff;
+  user-select: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.options-section {
+  width: 100%;
+  max-width: 768px;
+  margin-bottom: 1rem;
+  margin-inline: auto;
+}
+
+.play-button {
+  cursor: pointer;
+}
+
+.circles-container {
+  position: relative;
+  width: 100%;
+  max-width: 768px;
+  height: 400px;
+  margin-top: 1rem;
+  margin-inline: auto;
+  background-color: #fff;
+}
+
+@media (max-width: 790px) {
+  body {
+    margin: 1rem;
+  }
+
+  header h1 {
+    text-align: left;
+    font-size: 24px;
+  }
+
+  .options-section {
+    margin-bottom: 0px;
+  }
+}
+
+@media (max-width: 425px) {
+  .circles-container {
+    height: 80%;
+  }
+}
+
+[data-circle="true"] {
+  width: 50px;
+  height: 50px;
+  margin: 1px;
+  border-radius: 100%;
+  border: 2px solid gray;
+}
+
+[data-selected="true"] {
+  border: 3px solid #dd2d4a;
+}
