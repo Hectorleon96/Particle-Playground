@@ -54,6 +54,7 @@ class Playground {
     });
 
     this.circles.push(circle);
+    this.paintListItem(circle);
     this.paintCircle(circle);
 
     if (this.circles.length === this.#circlesLimit) {
@@ -63,7 +64,7 @@ class Playground {
     RESTART_CIRCLES_BUTTON.disabled = false;
   }
 
-  #createCircleNode(circleInstance) {
+  #createPlaygroundCircleNode(circleInstance) {
     const node = document.createElement("div");
     node.dataset.id = circleInstance.id;
     node.dataset.selected = circleInstance.selected;
@@ -71,12 +72,31 @@ class Playground {
     node.dataset.circle = true;
     node.style.backgroundColor = this.#defaultColors[circleInstance.id - 1];
     node.style.zIndex = circleInstance.id;
-
     return node;
   }
 
+  #createCircleListItem(circleInstance) {
+    const node = document.createElement("button");
+    node.dataset.listitem = true;
+    node.dataset.forcircle = circleInstance.id;
+    node.dataset.selected = false;
+    node.dataset.active = false;
+    node.style.backgroundColor = this.#defaultColors[circleInstance.id - 1];
+    return node;
+  }
+
+  paintListItem(circleInstance) {
+    const node = this.#createCircleListItem(circleInstance);
+    CIRCLES_LIST_CONTAINER.appendChild(node);
+    node.addEventListener("click", () => {
+      circleInstance.toggleSelected();
+      const activeCircles = this.getSelectedCircles();
+      this.hasSelectedCircles = activeCircles.total > 0;
+    });
+  }
+
   paintCircle(circleInstance) {
-    const node = this.#createCircleNode(circleInstance);
+    const node = this.#createPlaygroundCircleNode(circleInstance);
     CIRCLES_CONTAINER.appendChild(node);
     node.addEventListener("click", () => {
       circleInstance.toggleSelected();
@@ -86,13 +106,22 @@ class Playground {
   }
 
   resetCirclesList() {
+    CIRCLES_LIST_CONTAINER.replaceChildren();
     CIRCLES_CONTAINER.replaceChildren();
     this.circles = [new Circle({ circle: this.#defaultCircleData })];
     this.paintCircle(this.circles[0]);
+    this.paintListItem(this.circles[0]);
 
     const defaultNode = this.circles[0].getNodeInDom();
     if (defaultNode) {
       defaultNode.dataset.selected = false;
+      defaultNode.dataset.active = false;
+    }
+
+    const defaultListItemNode = this.circles[0].getListItemInDom();
+    if (defaultListItemNode) {
+      defaultListItemNode.dataset.selected = false;
+      defaultListItemNode.dataset.active = false;
     }
 
     this.hasSelectedCircles = false;
@@ -131,23 +160,32 @@ class Circle {
     this.active = newValue;
     const domNode = this.getNodeInDom();
     domNode.dataset.active = newValue;
+    const listItemNode = this.getListItemInDom();
+    listItemNode.dataset.active = newValue;
   }
 
   toggleSelected() {
     const domNode = this.getNodeInDom();
-    const selected = !this.selected;
-    this.selected = selected;
-    domNode.dataset.selected = selected;
+    const newValue = !this.selected;
+    this.selected = newValue;
+    domNode.dataset.selected = newValue;
+    const listItemNode = this.getListItemInDom();
+    listItemNode.dataset.selected = newValue;
   }
 
   getNodeInDom() {
     return document.querySelector(`div[data-id='${this.id}']`);
+  }
+
+  getListItemInDom() {
+    return document.querySelector(`button[data-forcircle='${this.id}']`);
   }
 }
 
 const playground = new Playground([]);
 
 if (playground.circles.length > 0) {
+  playground.paintListItem(playground.circles[0]);
   playground.paintCircle(playground.circles[0]);
 }
 
