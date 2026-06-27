@@ -95,6 +95,7 @@ class Playground {
       defaultNode.dataset.selected = false;
     }
 
+    this.hasSelectedCircles = false;
     ADD_CIRCLE_BUTTON.disabled = false;
     RESTART_CIRCLES_BUTTON.disabled = true;
   }
