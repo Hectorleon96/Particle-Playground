@@ -41,7 +41,6 @@ class Playground {
     });
 
     this.circles.push(circle);
-    const circleNode = this.#createCircleNode(circle);
     this.paintCircle(circle);
 
     if (this.circles.length === this.#circlesLimit) {
