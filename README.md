@@ -1,11 +1,15 @@
 # Particle Playground (In Progress)
 
-Particle Playground is a small interactive experiment built with vanilla JavaScript, HTML, and CSS.  
+## Live Demo
+
+https://hectorleon96.github.io/Particle-Playground/
+
+Particle Playground is a small interactive experiment built with vanilla JavaScript, HTML, and CSS.
 It simulates a simple system of independent circles that can be created, selected, and reset inside a bounded space.
 
 ## Concept
 
-Each circle is an independent entity with its own internal state, while the DOM acts purely as a visual representation layer.  
+Each circle is an independent entity with its own internal state, while the DOM acts purely as a visual representation layer.
 The project is designed to explore how state and UI can be separated without relying on frameworks.
 
 Key ideas explored:
@@ -20,6 +24,7 @@ Key ideas explored:
 
 - Create circles dynamically (up to a fixed limit)
 - Select individual circles with visual feedback
+- Pause and activate circles individually or in groups
 - Reset the entire system to its initial state
 - Basic structure for future movement and simulation logic
 
