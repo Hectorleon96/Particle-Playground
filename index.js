@@ -11,16 +11,19 @@ class Playground {
   #defaultColors = ["#3E5C76", "#2A9D8F", "#E76F51", "#8338EC"];
   #defaultCircleData = {
     id: 1,
-    direction: "right",
-    speed: 3,
     selected: false,
     active: false,
+    position: {
+      x: 0,
+      y: 0,
+    },
   };
 
-  constructor() {
+  constructor(clientRects) {
     this.started = false;
     this.circles = [new Circle({ circle: this.#defaultCircleData })];
     this.hasSelectedCircles = false;
+    this.clientRects = clientRects;
   }
 
   play() {
@@ -31,7 +34,7 @@ class Playground {
       circle.toggleActive();
     });
 
-    INIT_BUTTON.textContent = "Pause";
+    const boxSizes = (INIT_BUTTON.textContent = "Pause");
   }
 
   pause() {
@@ -98,6 +101,8 @@ class Playground {
   paintCircle(circleInstance) {
     const node = this.#createPlaygroundCircleNode(circleInstance);
     CIRCLES_CONTAINER.appendChild(node);
+    circleInstance.calculateInitialPosition(this.clientRects);
+
     node.addEventListener("click", () => {
       circleInstance.toggleSelected();
       const activeCircles = this.getSelectedCircles();
@@ -147,12 +152,13 @@ class Playground {
 }
 
 class Circle {
+  #circleSize = 50;
+
   constructor({ circle }) {
     this.id = circle.id;
-    this.direction = circle.direction;
-    this.speed = circle.speed;
     this.selected = circle.selected;
     this.active = circle.active;
+    this.position = circle.position;
   }
 
   toggleActive() {
@@ -180,9 +186,42 @@ class Circle {
   getListItemInDom() {
     return document.querySelector(`button[data-forcircle='${this.id}']`);
   }
+
+  calculateInitialPosition(clientRects) {
+    const { width, height } = clientRects;
+
+    const CIRCLE_SIZE = 50;
+
+    const options = {
+      1: {
+        x: 0,
+        y: 0,
+      },
+      2: {
+        x: width - this.#circleSize,
+        y: 0,
+      },
+      3: {
+        x: 0,
+        y: height - this.#circleSize,
+      },
+      4: {
+        x: width - this.#circleSize,
+        y: height - this.#circleSize,
+      },
+    };
+
+    const positions = options[this.id];
+    this.position = positions;
+    const node = this.getNodeInDom();
+
+    if (node) {
+      node.style.translate = `${positions.x}px ${positions.y}px`;
+    }
+  }
 }
 
-const playground = new Playground([]);
+const playground = new Playground(CIRCLES_CONTAINER.getBoundingClientRect());
 
 if (playground.circles.length > 0) {
   playground.paintListItem(playground.circles[0]);
