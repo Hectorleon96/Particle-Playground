@@ -39,20 +39,30 @@ class Playground {
   }
 
   animate() {
-    if (!this.started) {
-      return;
-    }
-    const xLimit = CIRCLES_CONTAINER.getBoundingClientRect().width - 50;
+    if (!this.started) return;
+
+    const container = CIRCLES_CONTAINER;
+
+    const { width } = container.getBoundingClientRect();
+
+    const circleSize = 50;
+    const xMin = 0;
+    const xMax = width - circleSize;
+
     const circlesToPlay = this.solveCirclesToUpdate();
 
     circlesToPlay.forEach((circle) => {
-      if (circle.position.vx === 1 && xLimit === circle.position.x) {
-        circle.position.vx = -1;
-      } else if (circle.position.vx === -1 && circle.position.x === 0) {
-        circle.position.vx = 1;
-      }
+      const x = circle.position.x;
 
-      circle.position.x += circle.position.vx;
+      if (circle.position.vx > 0 && x >= xMax) {
+        circle.position.vx = -1;
+        circle.position.x = xMax;
+      } else if (circle.position.vx < 0 && x <= xMin) {
+        circle.position.vx = 1;
+        circle.position.x = xMin;
+      } else {
+        circle.position.x += circle.position.vx;
+      }
 
       const node = circle.getNodeInDom();
       node.style.translate = `${circle.position.x}px ${circle.position.y}px`;
