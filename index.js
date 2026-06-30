@@ -4,7 +4,6 @@ const CIRCLES_LIST_CONTAINER = document.getElementById(
   "circles-list-container",
 );
 const CIRCLES_CONTAINER = document.getElementById("circles-container");
-const RESTART_CIRCLES_BUTTON = document.getElementById("reset-circles-button");
 
 class Playground {
   #circlesLimit = 4;
@@ -89,8 +88,6 @@ class Playground {
     if (this.circles.length === this.#circlesLimit) {
       ADD_CIRCLE_BUTTON.disabled = true;
     }
-
-    RESTART_CIRCLES_BUTTON.disabled = false;
   }
 
   #createPlaygroundCircleNode(circleInstance) {
@@ -134,10 +131,6 @@ class Playground {
       const activeCircles = this.getSelectedCircles();
       this.hasSelectedCircles = activeCircles.total > 0;
     });
-  }
-
-  resetCirclesList() {
-    window.location.reload();
   }
 
   getSelectedCircles() {
@@ -247,7 +240,3 @@ INIT_BUTTON.addEventListener("click", () => {
 });
 
 ADD_CIRCLE_BUTTON.addEventListener("click", () => playground.addCircle());
-
-RESTART_CIRCLES_BUTTON.addEventListener("click", () =>
-  playground.resetCirclesList(),
-);

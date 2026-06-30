@@ -10,10 +10,21 @@ body {
   overflow: hidden;
 }
 
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 768px;
+  margin: 1rem auto;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #607d8b;
+}
+
 h1 {
-  text-align: center;
   color: #fff;
   user-select: none;
+  margin: 0px;
 }
 
 button:disabled {
@@ -61,6 +72,7 @@ main {
   height: 400px;
   margin-inline: auto;
   background-color: #fff;
+  padding: 4px;
 }
 
 @media (max-width: 790px) {
@@ -69,7 +81,6 @@ main {
   }
 
   header h1 {
-    text-align: left;
     font-size: 24px;
   }
 
