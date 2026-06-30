@@ -11,7 +11,6 @@ class Playground {
   #defaultCircleData = {
     id: 1,
     selected: false,
-    active: false,
     position: {
       x: 0,
       y: 0,
@@ -30,11 +29,6 @@ class Playground {
   play() {
     this.started = true;
     const boxSizes = (INIT_BUTTON.textContent = "Pause");
-
-    this.circles.forEach((circle) => {
-      circle.toggleActive();
-    });
-
     requestAnimationFrame(this.animate.bind(this));
   }
 
@@ -73,12 +67,6 @@ class Playground {
 
   pause() {
     this.started = false;
-
-    const circlesToPause = this.solveCirclesToUpdate();
-    circlesToPause.forEach((circle) => {
-      circle.toggleActive();
-    });
-
     INIT_BUTTON.textContent = "Play";
     cancelAnimationFrame(this.requestAnimationId);
   }
@@ -104,7 +92,6 @@ class Playground {
     const node = document.createElement("div");
     node.dataset.id = circleInstance.id;
     node.dataset.selected = circleInstance.selected;
-    node.dataset.active = circleInstance.active;
     node.dataset.circle = true;
     node.style.backgroundColor = this.#defaultColors[circleInstance.id - 1];
     node.style.zIndex = circleInstance.id;
@@ -116,7 +103,6 @@ class Playground {
     node.dataset.listitem = true;
     node.dataset.forcircle = circleInstance.id;
     node.dataset.selected = false;
-    node.dataset.active = false;
     node.style.backgroundColor = this.#defaultColors[circleInstance.id - 1];
     return node;
   }
@@ -126,8 +112,8 @@ class Playground {
     CIRCLES_LIST_CONTAINER.appendChild(node);
     node.addEventListener("click", () => {
       circleInstance.toggleSelected();
-      const activeCircles = this.getSelectedCircles();
-      this.hasSelectedCircles = activeCircles.total > 0;
+      const selectedCircles = this.getSelectedCircles();
+      this.hasSelectedCircles = selectedCircles.total > 0;
     });
   }
 
@@ -138,16 +124,16 @@ class Playground {
 
     node.addEventListener("click", () => {
       circleInstance.toggleSelected();
-      const activeCircles = this.getSelectedCircles();
-      this.hasSelectedCircles = activeCircles.total > 0;
+      const selectedCircles = this.getSelectedCircles();
+      this.hasSelectedCircles = selectedCircles.total > 0;
     });
   }
 
   getSelectedCircles() {
-    const activeCircles = this.circles.filter((circle) => circle.selected);
+    const selectedCircles = this.circles.filter((circle) => circle.selected);
     return {
-      total: activeCircles.length,
-      circles: activeCircles,
+      total: selectedCircles.length,
+      circles: selectedCircles,
     };
   }
 
@@ -166,17 +152,7 @@ class Circle {
   constructor({ circle }) {
     this.id = circle.id;
     this.selected = circle.selected;
-    this.active = circle.active;
     this.position = circle.position;
-  }
-
-  toggleActive() {
-    const newValue = !this.active;
-    this.active = newValue;
-    const domNode = this.getNodeInDom();
-    domNode.dataset.active = newValue;
-    const listItemNode = this.getListItemInDom();
-    listItemNode.dataset.active = newValue;
   }
 
   toggleSelected() {
