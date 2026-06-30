@@ -3,11 +3,8 @@
 }
 
 body {
-  height: 100dvh;
-  max-height: 100dvh;
   margin: 0px;
   background-color: #222;
-  overflow: hidden;
 }
 
 header {
