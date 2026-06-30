@@ -72,7 +72,6 @@ main {
   height: 400px;
   margin-inline: auto;
   background-color: #fff;
-  padding: 4px;
 }
 
 @media (max-width: 790px) {
