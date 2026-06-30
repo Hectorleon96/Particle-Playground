@@ -90,12 +90,6 @@ main {
   }
 }
 
-@media (max-width: 425px) {
-  .circles-list-container {
-    display: none;
-  }
-}
-
 [data-circle="true"] {
   position: absolute;
   width: 50px;

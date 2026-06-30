@@ -15,7 +15,7 @@ class Playground {
     position: {
       x: 0,
       y: 0,
-      vx: 1,
+      vx: 3,
     },
   };
 
@@ -55,10 +55,10 @@ class Playground {
       const x = circle.position.x;
 
       if (circle.position.vx > 0 && x >= xMax) {
-        circle.position.vx = -1;
+        circle.position.vx = -3;
         circle.position.x = xMax;
       } else if (circle.position.vx < 0 && x <= xMin) {
-        circle.position.vx = 1;
+        circle.position.vx = 3;
         circle.position.x = xMin;
       } else {
         circle.position.x += circle.position.vx;
@@ -205,22 +205,22 @@ class Circle {
       1: {
         x: 0,
         y: 0,
-        vx: 1,
+        vx: 3,
       },
       2: {
         x: width - this.#circleSize,
         y: 0,
-        vx: -1,
+        vx: 3,
       },
       3: {
         x: 0,
         y: height - this.#circleSize,
-        vx: 1,
+        vx: 3,
       },
       4: {
         x: width - this.#circleSize,
         y: height - this.#circleSize,
-        vx: -1,
+        vx: -3,
       },
     };
 
