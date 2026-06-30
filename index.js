@@ -16,6 +16,7 @@ class Playground {
     position: {
       x: 0,
       y: 0,
+      vx: 1,
     },
   };
 
@@ -24,17 +25,41 @@ class Playground {
     this.circles = [new Circle({ circle: this.#defaultCircleData })];
     this.hasSelectedCircles = false;
     this.clientRects = clientRects;
+    this.requestAnimationId;
   }
 
   play() {
     this.started = true;
+    const boxSizes = (INIT_BUTTON.textContent = "Pause");
 
-    const circlesToPlay = this.solveCirclesToUpdate();
-    circlesToPlay.forEach((circle) => {
+    this.circles.forEach((circle) => {
       circle.toggleActive();
     });
 
-    const boxSizes = (INIT_BUTTON.textContent = "Pause");
+    requestAnimationFrame(this.animate.bind(this));
+  }
+
+  animate() {
+    if (!this.started) {
+      return;
+    }
+    const xLimit = CIRCLES_CONTAINER.getBoundingClientRect().width - 50;
+    const circlesToPlay = this.solveCirclesToUpdate();
+
+    circlesToPlay.forEach((circle) => {
+      if (circle.position.vx === 1 && xLimit === circle.position.x) {
+        circle.position.vx = -1;
+      } else if (circle.position.vx === -1 && circle.position.x === 0) {
+        circle.position.vx = 1;
+      }
+
+      circle.position.x += circle.position.vx;
+
+      const node = circle.getNodeInDom();
+      node.style.translate = `${circle.position.x}px ${circle.position.y}px`;
+    });
+
+    this.requestAnimationId = requestAnimationFrame(this.animate.bind(this));
   }
 
   pause() {
@@ -46,6 +71,7 @@ class Playground {
     });
 
     INIT_BUTTON.textContent = "Play";
+    cancelAnimationFrame(this.requestAnimationId);
   }
 
   addCircle() {
@@ -111,27 +137,7 @@ class Playground {
   }
 
   resetCirclesList() {
-    CIRCLES_LIST_CONTAINER.replaceChildren();
-    CIRCLES_CONTAINER.replaceChildren();
-    this.circles = [new Circle({ circle: this.#defaultCircleData })];
-    this.paintCircle(this.circles[0]);
-    this.paintListItem(this.circles[0]);
-
-    const defaultNode = this.circles[0].getNodeInDom();
-    if (defaultNode) {
-      defaultNode.dataset.selected = false;
-      defaultNode.dataset.active = false;
-    }
-
-    const defaultListItemNode = this.circles[0].getListItemInDom();
-    if (defaultListItemNode) {
-      defaultListItemNode.dataset.selected = false;
-      defaultListItemNode.dataset.active = false;
-    }
-
-    this.hasSelectedCircles = false;
-    ADD_CIRCLE_BUTTON.disabled = false;
-    RESTART_CIRCLES_BUTTON.disabled = true;
+    window.location.reload();
   }
 
   getSelectedCircles() {
@@ -196,18 +202,22 @@ class Circle {
       1: {
         x: 0,
         y: 0,
+        vx: 1,
       },
       2: {
         x: width - this.#circleSize,
         y: 0,
+        vx: -1,
       },
       3: {
         x: 0,
         y: height - this.#circleSize,
+        vx: 1,
       },
       4: {
         x: width - this.#circleSize,
         y: height - this.#circleSize,
+        vx: -1,
       },
     };
 
