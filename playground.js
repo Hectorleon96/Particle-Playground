@@ -1,9 +1,11 @@
-import { ADD_CIRCLE_BUTTON, CIRCLES_CONTAINER, INIT_BUTTON } from "./dom.js";
-import { Circle } from "./circle.js";
+import {
+  ADD_CIRCLE_BUTTON,
+  CIRCLES_CONTAINER,
+  CIRCLES_LIST_CONTAINER,
+  INIT_BUTTON,
+} from "./dom.js";
 
-const CIRCLES_LIST_CONTAINER = document.getElementById(
-  "circles-list-container",
-);
+import { Circle } from "./circle.js";
 
 export class Playground {
   #circlesLimit = 4;
