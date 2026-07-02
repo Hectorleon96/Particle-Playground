@@ -1,4 +1,4 @@
-# Particle Playground (In Progress)
+# Particle Playground
 
 ## Live Demo
 
