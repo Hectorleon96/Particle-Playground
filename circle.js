@@ -34,21 +34,25 @@ export class Circle {
         x: 0,
         y: 0,
         vx: 3,
+        vy: 4,
       },
       2: {
         x: width - this.#circleSize,
         y: 0,
-        vx: 3,
+        vx: 2,
+        vy: 4,
       },
       3: {
         x: 0,
         y: height - this.#circleSize,
         vx: 3,
+        vy: -2,
       },
       4: {
         x: width - this.#circleSize,
         y: height - this.#circleSize,
-        vx: -3,
+        vx: -4,
+        vy: -1,
       },
     };
 

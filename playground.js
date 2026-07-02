@@ -16,7 +16,8 @@ export class Playground {
     position: {
       x: 0,
       y: 0,
-      vx: 3,
+      vx: 1,
+      vy: 2,
     },
   };
 
@@ -39,25 +40,39 @@ export class Playground {
 
     const container = CIRCLES_CONTAINER;
 
-    const { width } = container.getBoundingClientRect();
+    const { width, height } = container.getBoundingClientRect();
 
     const circleSize = 50;
     const xMin = 0;
     const xMax = width - circleSize;
 
+    const yMin = 0;
+    const yMax = height - circleSize;
+
     const circlesToPlay = this.solveCirclesToUpdate();
 
     circlesToPlay.forEach((circle) => {
       const x = circle.position.x;
+      const y = circle.position.y;
 
       if (circle.position.vx > 0 && x >= xMax) {
-        circle.position.vx = -3;
+        circle.position.vx = -this.randomSpeedValue();
         circle.position.x = xMax;
       } else if (circle.position.vx < 0 && x <= xMin) {
-        circle.position.vx = 3;
+        circle.position.vx = this.randomSpeedValue();
         circle.position.x = xMin;
       } else {
         circle.position.x += circle.position.vx;
+      }
+
+      if (circle.position.vy > 0 && y >= yMax) {
+        circle.position.vy = -this.randomSpeedValue();
+        circle.position.y = yMax;
+      } else if (circle.position.vy < 0 && y <= yMin) {
+        circle.position.vy = this.randomSpeedValue();
+        circle.position.y = yMin;
+      } else {
+        circle.position.y += circle.position.vy;
       }
 
       const node = circle.getNodeInDom();
@@ -145,5 +160,9 @@ export class Playground {
       : this.circles;
 
     return circles;
+  }
+
+  randomSpeedValue() {
+    return Math.floor(Math.random() * 5) + 2;
   }
 }
